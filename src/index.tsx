@@ -1,12 +1,32 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
+import 'antd/dist/antd.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {RootGoodsStore} from './store';
+import {ExchangeRateApi, GoodsApi, GroupsApi} from './api';
+import {GoodsStore} from "./store/GoodsStore";
+import {ExchangeRateStore} from './store/ExchangeRateStore';
+import {BasketStore} from './store/BasketStore';
+import {autorun} from "mobx";
+
+
+export const rootGoodsStore = new RootGoodsStore({
+  goodsApi: GoodsApi,
+  groupsApi: GroupsApi,
+  exchangeRateApi: ExchangeRateApi,
+  GoodsStore: GoodsStore,
+  ExchangeRateStore: ExchangeRateStore,
+  BasketStore: BasketStore
+});
+autorun(() => {
+  console.log(rootGoodsStore.basketStore?.goods);
+})
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App goods={rootGoodsStore}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
